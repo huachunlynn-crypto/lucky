@@ -4,6 +4,9 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "scripts": {
+    "build": "echo 'Static project, no build step required.'"
+  },
   "dependencies": {
     "@google/genai": "latest",
     "react": "^18.3.1",

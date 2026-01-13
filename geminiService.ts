@@ -3,9 +3,14 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { FortuneResult } from "./types.ts";
 
 export const generateDailyFortune = async (): Promise<FortuneResult> => {
-  // 遵循 SDK 规范：直接从 process.env 获取 API 密钥
-  // 注意：在浏览器环境中，这依赖于 index.html 中定义的全局 window.process 垫片
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+  // 获取 API KEY
+  const apiKey = (window as any).process?.env?.API_KEY || process.env.API_KEY;
+  
+  if (!apiKey) {
+    throw new Error("未找到 API_KEY，请检查环境变量配置。");
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
   
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
@@ -24,9 +29,9 @@ export const generateDailyFortune = async (): Promise<FortuneResult> => {
             items: {
               type: Type.OBJECT,
               properties: {
-                category: { type: Type.STRING, description: '如：财运' },
-                detail: { type: Type.STRING, description: '一小段具体的预测' },
-                icon: { type: Type.STRING, description: '一个对应的Emoji' }
+                category: { type: Type.STRING },
+                detail: { type: Type.STRING },
+                icon: { type: Type.STRING }
               },
               required: ["category", "detail", "icon"]
             }
@@ -37,11 +42,11 @@ export const generateDailyFortune = async (): Promise<FortuneResult> => {
         },
         required: ["luckLevel", "summary", "luckyColor", "luckyNumber", "categories", "advice", "emoji", "mascotReaction"]
       },
-      systemInstruction: "你是一个超级可爱、正能量的占卜精灵。你的语言风格软萌，充满鼓励。你生成的预测必须包含2-3个具体的维度细分。",
+      systemInstruction: "你是一个超级可爱、正能量的占卜精灵。你的语言风格软萌，充满鼓励。",
     },
   });
 
   const text = response.text;
-  if (!text) throw new Error("No response from AI");
+  if (!text) throw new Error("AI 返回内容为空");
   return JSON.parse(text);
 };

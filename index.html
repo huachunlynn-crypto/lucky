@@ -40,26 +40,17 @@
     }
   </style>
   <script>
-    // 在模块加载前注入必要的环境对象，防止第三方库报错
+    // 环境垫片：确保全局 process 对象存在，防止 SDK 初始化失败
     window.process = window.process || { env: { NODE_ENV: 'production' } };
     
-    // 全局错误捕获，如果页面依然白屏，它会将错误原因显示在顶部红色区域
     window.onerror = function(msg, url, line, col, error) {
       console.error("Global Error:", msg, error);
       const display = document.getElementById('error-display');
       if (display) {
         display.style.display = 'block';
-        display.innerHTML = `<strong>脚本运行出错:</strong> ${msg} <br><small>位置: ${url}:${line}</small>`;
+        display.innerHTML = `<strong>运行出错:</strong> ${msg} <br><small>位置: ${url}:${line}</small>`;
       }
       return false;
-    };
-    window.onunhandledrejection = function(event) {
-      console.error("Promise Rejection:", event.reason);
-      const display = document.getElementById('error-display');
-      if (display) {
-        display.style.display = 'block';
-        display.innerHTML = `<strong>异步错误:</strong> ${event.reason}`;
-      }
     };
   </script>
   <script type="importmap">
@@ -69,7 +60,7 @@
     "react-dom": "https://esm.sh/react-dom@18.3.1",
     "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
     "lucide-react": "https://esm.sh/lucide-react@0.460.0?external=react,react-dom",
-    "@google/genai": "https://esm.sh/@google/genai@0.2.1",
+    "@google/genai": "https://esm.sh/@google/genai@0.21.0",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/"
   }

@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { FortuneResult } from '../types';
+import { FortuneResult } from '../types.ts';
 import { Palette, Hash, Sparkle, Quote, TrendingUp } from 'lucide-react';
-import Mascot from './Mascot';
+import Mascot from './Mascot.tsx';
 
 interface FortuneCardProps {
   fortune: FortuneResult;

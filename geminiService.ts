@@ -1,10 +1,11 @@
 
 import { GoogleGenAI, Type } from "@google/genai";
-import { FortuneResult } from "./types";
-
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+import { FortuneResult } from "./types.ts";
 
 export const generateDailyFortune = async (): Promise<FortuneResult> => {
+  // 每次调用时实例化，确保能获取到最新的 process.env.API_KEY
+  const ai = new GoogleGenAI({ apiKey: (window as any).process?.env?.API_KEY || (process.env.API_KEY as string) });
+  
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
     contents: '请帮我生成今日运势。要求：1.从[财运, 事业运, 爱情运, 健康运, 学业运]中随机选择2-3个维度。2.包含整体运势等级、总结、幸运色/数字、温暖建议。3.指定一个吉祥物反应(happy, excited, wink, love)。',

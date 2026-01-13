@@ -1,11 +1,11 @@
 
 import React, { useState } from 'react';
 import { Sparkles, Star, Heart, Clover, AlertCircle } from 'lucide-react';
-import { generateDailyFortune } from './geminiService';
-import { FortuneResult, AppState } from './types';
-import LuckyButton from './components/LuckyButton';
-import FortuneCard from './components/FortuneCard';
-import Mascot from './components/Mascot';
+import { generateDailyFortune } from './geminiService.ts';
+import { FortuneResult, AppState } from './types.ts';
+import LuckyButton from './components/LuckyButton.tsx';
+import FortuneCard from './components/FortuneCard.tsx';
+import Mascot from './components/Mascot.tsx';
 
 const App: React.FC = () => {
   const [state, setState] = useState<AppState>(AppState.IDLE);

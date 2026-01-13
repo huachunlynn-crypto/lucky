@@ -3,8 +3,9 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { FortuneResult } from "./types.ts";
 
 export const generateDailyFortune = async (): Promise<FortuneResult> => {
-  // 每次调用时实例化，确保能获取到最新的 process.env.API_KEY
-  const ai = new GoogleGenAI({ apiKey: (window as any).process?.env?.API_KEY || (process.env.API_KEY as string) });
+  // 遵循 SDK 规范：直接从 process.env 获取 API 密钥
+  // 注意：在浏览器环境中，这依赖于 index.html 中定义的全局 window.process 垫片
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
   
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',

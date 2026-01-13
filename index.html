@@ -40,22 +40,25 @@
     }
   </style>
   <script>
-    // 关键修复：浏览器环境没有 process 对象，手动定义防止代码崩溃
-    window.process = { env: { NODE_ENV: 'production' } };
+    // 在模块加载前注入必要的环境对象，防止第三方库报错
+    window.process = window.process || { env: { NODE_ENV: 'production' } };
     
+    // 全局错误捕获，如果页面依然白屏，它会将错误原因显示在顶部红色区域
     window.onerror = function(msg, url, line, col, error) {
+      console.error("Global Error:", msg, error);
       const display = document.getElementById('error-display');
       if (display) {
         display.style.display = 'block';
-        display.innerHTML = `<strong>页面运行出错:</strong> ${msg} <br><small>位置: ${url}:${line}</small>`;
+        display.innerHTML = `<strong>脚本运行出错:</strong> ${msg} <br><small>位置: ${url}:${line}</small>`;
       }
       return false;
     };
     window.onunhandledrejection = function(event) {
+      console.error("Promise Rejection:", event.reason);
       const display = document.getElementById('error-display');
       if (display) {
         display.style.display = 'block';
-        display.innerHTML = `<strong>异步请求错误:</strong> ${event.reason}`;
+        display.innerHTML = `<strong>异步错误:</strong> ${event.reason}`;
       }
     };
   </script>
